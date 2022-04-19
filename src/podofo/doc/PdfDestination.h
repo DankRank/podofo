@@ -250,8 +250,8 @@ class PODOFO_DOC_API PdfDestination {
     static const long  s_lNumDestinations;
     static const char* s_names[];
 
-    PdfArray	m_array;
-    PdfObject*	m_pObject;
+    PdfObject m_object;
+    PdfObject* m_pObject;
 
     /** Create an empty destination - NOT ALLOWED
      */
@@ -280,7 +280,7 @@ inline const PdfObject* PdfDestination::GetObject() const
 // -----------------------------------------------------
 inline PdfArray &PdfDestination::GetArray()
 {
-    return m_array;
+    return m_object.GetArray();
 }
 
 // -----------------------------------------------------
@@ -288,7 +288,7 @@ inline PdfArray &PdfDestination::GetArray()
 // -----------------------------------------------------
 inline const PdfArray &PdfDestination::GetArray() const
 {
-    return m_array;
+    return m_object.GetArray();
 }
 
 // -----------------------------------------------------
@@ -296,10 +296,10 @@ inline const PdfArray &PdfDestination::GetArray() const
 // -----------------------------------------------------
 inline EPdfDestinationType PdfDestination::GetType() const 
 {
-    if ( !m_array.size() ) 
+    if ( !GetArray().size() )
         return ePdfDestinationType_Unknown;  
     
-    PdfName tp = m_array[1].GetName();
+    PdfName tp = GetArray()[1].GetName();
     
     if ( tp == PdfName("XYZ") ) return ePdfDestinationType_XYZ;
     if ( tp == PdfName("Fit") ) return ePdfDestinationType_Fit;
@@ -327,7 +327,7 @@ inline double PdfDestination::GetDValue() const
         PODOFO_RAISE_ERROR( ePdfError_WrongDestinationType );
     }
     
-    return m_array[2].GetReal();
+    return GetArray()[2].GetReal();
 }
 
 // -----------------------------------------------------
@@ -344,7 +344,7 @@ inline double PdfDestination::GetLeft() const
         PODOFO_RAISE_ERROR( ePdfError_WrongDestinationType );
     }
     
-    return m_array[2].GetReal();
+    return GetArray()[2].GetReal();
 }
 
 // -----------------------------------------------------
@@ -357,8 +357,8 @@ inline PdfRect PdfDestination::GetRect() const
         PODOFO_RAISE_ERROR( ePdfError_WrongDestinationType );
     }
     
-    return PdfRect(m_array[2].GetReal(), m_array[3].GetReal(),
-                   m_array[4].GetReal(), m_array[5].GetReal());
+    return PdfRect(GetArray()[2].GetReal(), GetArray()[3].GetReal(),
+                   GetArray()[4].GetReal(), GetArray()[5].GetReal());
 }
 
 // -----------------------------------------------------
@@ -371,12 +371,12 @@ inline double PdfDestination::GetTop() const
     switch (tp) 
     { 
         case ePdfDestinationType_XYZ:
-            return m_array[3].GetReal();
+            return GetArray()[3].GetReal();
         case ePdfDestinationType_FitH:
         case ePdfDestinationType_FitBH:
-            return m_array[2].GetReal();
+            return GetArray()[2].GetReal();
         case ePdfDestinationType_FitR:
-            return m_array[5].GetReal();
+            return GetArray()[5].GetReal();
         case ePdfDestinationType_Fit:
         case ePdfDestinationType_FitV:
         case ePdfDestinationType_FitB:
@@ -399,7 +399,7 @@ inline double PdfDestination::GetZoom() const
         PODOFO_RAISE_ERROR( ePdfError_WrongDestinationType );
     }
   
-    return m_array[4].GetReal();
+    return GetArray()[4].GetReal();
 }
 
 };
